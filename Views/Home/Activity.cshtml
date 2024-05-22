@@ -1,0 +1,32 @@
+@model List<Content>;
+@{
+    ViewData["Title"] = "Hoạt động của hội";
+}
+<div class="container">
+    <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+        <ol class="breadcrumb ms-2">
+            <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+        </ol>
+    </nav>
+</div>
+<div class="container mt-5" id="news-container">
+    @if(@Model == null || @Model.Count == 0){
+        <div class="text-center my-5">
+            <h5>Không có bản tin nào</h5>
+        </div>
+    }else{
+        @foreach(var news in Model){
+            <a class="d-flex news-item border-bottom pb-2 mt-3 text-dark" asp-action="Detail" asp-controller="Content" asp-route-id="@news.IContentId">
+                @if(String.IsNullOrEmpty(@news.SImage)){
+                    <img class="rounded" src="~/images/thumbnail_news.png" alt="">
+                }else {
+                    <img class="rounded" src="~/images/@news.SImage" alt="">
+                }
+                <div>
+                    <h5 class="news-title">@news.STitle</h5>
+                    <p class="news-content">@news.SMainbody</p>
+                </div>
+            </a>
+        }
+    }
+</div>

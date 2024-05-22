@@ -1,0 +1,40 @@
+@model RegisterView;
+@{
+    ViewData["Title"] = "Đăng ký";
+}
+
+<div class="container text-center">
+    <img class="mt-3" src="~/images/logo_hiep_hoi_trai_tim.png" width="150px">
+    <h2 class="text-success mt-4 mb-4">Đăng ký</h2>
+    <form asp-controller ="Account" asp-action ="Register"> 
+        <div class="form-floating mb-3 w-50 mx-auto"> 
+            <input class="form-control" placeholder="" asp-for="SAccountName" /> 
+            <label  for="SAccountName">Tên tài khoản</label> 
+            <span asp-validation-for="SAccountName" class="text-danger"></span> 
+        </div> 
+        <div class="form-floating mb-3 w-50 mx-auto"> 
+            <input class="form-control" placeholder="" asp-for="SEmail" /> 
+            <label  for="SEmail">Email</label> 
+            <span asp-validation-for="SEmail" class="text-danger"></span> 
+        </div> 
+        
+        <div class="form-floating mb-3 w-50 mx-auto" > 
+            <input class="form-control" placeholder="" asp-for="SPassword" />
+            <label  for="SPassword">Mật khẩu</label> 
+            <span asp-validation-for="SPassword" class="text-danger"></span> 
+        </div> 
+        <div class="form-floating mb-3 w-50 mx-auto" > 
+            <input class="form-control" placeholder="" asp-for="SAuthenPassword" />
+            <label  for="SAuthenPassword">Nhập lại mật khẩu</label> 
+            <span asp-validation-for="SAuthenPassword" class="text-danger"></span> 
+        </div>
+        <div class="form-floating mb-3 w-50 mx-auto" > 
+            <input class="form-control" placeholder="" asp-for="DBirthofdate" />
+            <label  for="DBirthofdate">Ngày sinh</label> 
+            <span asp-validation-for="DBirthofdate" class="text-danger"></span> 
+        </div>
+        <div class="d-grid w-50 mx-auto">
+            <button class="btn btn-primary" type="submit">Đăng ký</button>
+        </div>
+    </form> 
+</div>

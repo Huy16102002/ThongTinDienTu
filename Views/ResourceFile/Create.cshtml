@@ -1,0 +1,46 @@
+@model ResourceFileView;
+@{
+    ViewData["Title"] = "Thêm tệp";
+}
+<div class="text-center m-5">
+    <h2>@ViewData["Title"]</h2>
+</div>
+<div class="container">
+    <form asp-action="Create" asp-controller="ResourceFile" enctype="multipart/form-data">
+        <div class="input-group mb-3">
+            <label for="SFilename" class="input-group-text">Tệp<span class="text-danger">*</span></label>
+            <input class="form-control" placeholder="" asp-for="SFilename" accept="Image/png, Image/jpeg, Video/* , Audio/*, .doc,. docx, .pdf">
+        </div>
+        <span asp-validation-for="SFilename" class="text-danger"></span>
+        <div class="form-floating mb-3">
+            <input class="form-control" placeholder="" asp-for="SDescription">
+            <label for="SDescription">Mô tả<span class="text-danger">*</span></label>
+            <span asp-validation-for="SDescription" class="text-danger"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input class="form-control" placeholder="" asp-for="DUploaddate">
+            <label for="DUploaddate">Ngày đăng<span class="text-danger">*</span></label>
+            <span asp-validation-for="DUploaddate" class="text-danger"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <select class="form-select" aria-label="Default select example" asp-for="ICategoryId" >
+                @foreach(var type in Model.LFileCategories!){
+                    if(type.IFileCategoryId == 1){
+                        <option selected value="@type.IFileCategoryId">@type.STitle</option>
+                    }else{
+                        <option value="@type.IFileCategoryId">@type.STitle</option>
+                    }
+                }
+            </select>
+            <label >Loại tệp</label>
+        </div>
+        <div>
+            <button type="submit" class="btn btn-success m-3">
+                <i class="bi bi-plus-circle"></i> Tạo
+            </button>
+            <a class="btn btn-danger m-3" asp-action="Index" asp-controller="ResourceFile">
+                <i class="bi bi-x-circle"></i> Hủy
+            </a>
+        </div>
+    </form>
+</div>

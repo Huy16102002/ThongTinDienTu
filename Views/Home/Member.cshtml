@@ -1,0 +1,78 @@
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@model List<Account>;
+@{
+    ViewData["Title"] = "Hội viên";
+}
+<div class="container">
+    <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+        <ol class="breadcrumb ms-2">
+            <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+        </ol>
+    </nav>
+</div>
+<div class="text-center">
+    <h5 class="text-info-emphasis text-uppercase">Quyền lợi hội viên</h5>
+</div>
+<div class="container mt-3 d-flex justify-content-center" id="members-container">
+    <div class="card text-center border-primary m-3" style="max-width: 18rem;">
+        <div class="card-header">
+            <h5 class="card-title m-0">Cộng đồng</h5>
+        </div>
+        <div class="card-body">
+            <p class="card-text">Hội viên có cơ hội tham gia vào một cộng đồng những người có cùng tâm hồn và mục tiêu. Điều này tạo ra một môi trường động viên, hỗ trợ và kết nối với những người có cùng lý tưởng và quan điểm.</p>
+        </div>
+    </div>
+
+    <div class="card text-center border-primary m-3" style="max-width: 18rem;">
+        <div class="card-header">
+            <h5 class="card-title m-0">Mạng lưới liên kết</h5>
+        </div>
+        <div class="card-body">
+            <p class="card-text">Hội viên có cơ hội truy cập vào một mạng lưới liên kết gồm những người cùng quan tâm và có ảnh hưởng. Điều này có thể mở ra cơ hội hợp tác, hỗ trợ và phát triển cá nhân và chuyên môn.</p>
+        </div>
+    </div>
+
+    <div class="card text-center border-primary m-3" style="max-width: 18rem;">
+        <div class="card-header">
+            <h5 class="card-title m-0">Hoạt động từ thiện</h5>
+        </div>
+        <div class="card-body">
+            <p class="card-text">Hội viên có cơ hội tham gia vào các hoạt động từ thiện và các dự án cộng đồng do tổ chức tổ chức. Điều này có thể bao gồm việc tham gia vào các chương trình ủng hộ người nghèo, cung cấp dịch vụ y tế miễn phí, hoặc hỗ trợ giáo dục và phát triển cộng đồng.</p>
+        </div>
+    </div>
+
+    <div class="card text-center border-primary m-3" style="max-width: 18rem;">
+        <div class="card-header">
+            <h5 class="card-title m-0">Học hỏi và phát triển</h5>
+        </div>
+        <div class="card-body">
+            <p class="card-text">Hội viên có cơ hội học hỏi và phát triển bản thân thông qua việc tham gia vào các khóa đào tạo, hội thảo, và các hoạt động giáo dục khác do tổ chức tổ chức. Điều này có thể giúp họ phát triển kỹ năng, kiến thức và kinh nghiệm mới.</p>
+        </div>
+    </div>
+</div>
+@if(@HttpContextAccessor.HttpContext!.Session.GetString("User") == null){
+    <div class="text-center mt-2 text-uppercase">
+        <button class="btn btn-primary">Đăng ký hội viên</button>
+    </div>
+}
+<div class="text-center mt-5 mb-5">
+    <h5 class="text-info-emphasis" text-uppercase>Thành viên tiêu biểu</h5>
+</div>
+<div class="container text-center" id="members-list">
+    @foreach(var member in Model){
+        if(member.IRoleId == 2){
+            <div class="d-flex flex-column align-items-center justify-content-center shadow-sm rounded bg-body-tertiary py-5">
+                <div>
+                    <img class="rounded-circle mb-4" src="/images/avatars/avatar_hoder.png" height="50px" width="50px">
+                </div>
+                
+                <div>
+                    <h6>@member.SName</h6>
+                    <span>@member.SEmail</span> <br>
+                    <span>Hội viên</span>
+                </div>
+            </div>
+        }
+    }
+</div>

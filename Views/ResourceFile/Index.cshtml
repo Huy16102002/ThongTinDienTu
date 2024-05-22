@@ -1,0 +1,66 @@
+@model List<ResourceFile>;
+@{
+    ViewData["Title"] = "Quản lý tệp";
+}
+
+
+<div class="container" id="controller-container">
+    <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" >Quản lý tài nguyên</li>
+            <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+        </ol>
+    </nav>
+    <div id="content-controller-body">
+        <div id="content-controller-menu" class="item1 border-top border-end">
+            <ul class="nav flex-column nav-pills">
+                <li class="nav-item mb-3 fs-5">
+                    <a class="nav-link"  asp-action="Index" asp-controller="Content">Quản lý tin tức</a>
+                </li>
+                <li class="nav-item mb-3 fs-5" >
+                    <a class="nav-link "  asp-action="Index" asp-controller="Category">Quản lý danh mục</a>
+                </li>
+                <li class="nav-item mb-3 fs-5">
+                    <a class="nav-link active" aria-current="page">Quản lý tệp</a>
+                </li>
+                <li class="nav-item mb-3 fs-5">
+                    <a class="nav-link" asp-action="Index" asp-controller="Feedback">Quản lý hỏi đáp</a>
+                </li>
+            </ul>
+        </div>
+        <div class="item2 border-top">
+            <div class="row justify-content-between">
+                <div class="col-md-4">
+                    <a id="btn-add-categoty" class="btn btn-primary" asp-controller="ResourceFile" asp-action="Create">
+                        <i class="bi bi-plus-circle"></i> Thêm tệp
+                    </a>
+                </div>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Mô tả</th>
+                        <th scope="col">Tên tệp</th>
+                        <th scope="col">Ngày tải lên</th>
+                        <th scope="col">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody id="table-files">
+                    @foreach(var item in Model){
+                        <tr>
+                            <th scope="row">@item.IResourceFileId</th>
+                            <td>@item.SDescription</td>
+                            <td>@item.SFilename</td>
+                            <td>@item.DUploaddate!.Value.ToString("dd/MM/yyyy")</td>
+                            <td>
+                                <a class="btn btn-success m-1" asp-action="Edit" asp-controller="ResourceFile" asp-route-id="@item.IResourceFileId"><i class="bi bi-pencil-square"></i> Sửa</a>
+                                <a class="btn btn-danger m-1" asp-action="Delete" asp-controller="ResourceFile" asp-route-id="@item.IResourceFileId" onclick="return confirm('Có chắc chắn xóa tệp vĩnh viễn?');"><i class="bi bi-trash"></i> Xóa</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,118 @@
+@model List<Account>;
+@{
+    ViewData["Title"] = "Quản lý hội viên";
+}
+<div class="container">
+    <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+        <ol class="breadcrumb ms-2">
+            <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+        </ol>
+    </nav>
+</div>
+<div class="container">
+    <div class="d-flex justify-content-between mb-3">
+        <a class="btn btn-primary" asp-controller="Account" asp-action="Create" >Thêm hội viên</a>
+        <div class="input-group col-md-4" style="width: 300px;">
+            <input type="text" class="form-control" id="searchInput" name="searchInputString" placeholder="Tìm kiếm..." >
+            <button class="btn btn-outline-primary" onclick="searchAccount($('#searchInput').val())"><i class="bi bi-search"></i></button>
+        </div>
+    </div>
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Ảnh đại điện</th>
+                <th scope="col">Tên tài khoản</th>
+                <th scope="col">Email</th>
+                <th scope="col">Ngày sinh</th>
+                <th scope="col">Điện thoại</th>
+                <th scope="col">Thao tác</th>
+            </tr>
+        </thead>
+        <tbody id="table-accounts">
+            @foreach(var item in Model){
+                <tr>
+                    <th scope="row">@item.IAccountId</th>
+                    <td>
+                        @if(String.IsNullOrEmpty(@item.SAvatar)){
+                            <img src="~/images/avatars/avatar_hoder.png" alt="" class="rounded-circle" width="40px" height="40px">
+                        }else{
+                            <img src="~/images/avatars/@item.SAvatar" alt="" class="rounded-circle" width="40px" height="40px">
+                        }
+                    </td>
+                    <td>@item.SName</td>
+                    <td>@item.SEmail</td>
+                    <td>@item.DBirthofdate!.Value.ToString("dd/MM/yyyy")</td>
+                    <td>@item.SPhone</td>
+                    <td>
+                        <a class="btn btn-success m-1" asp-action="Edit" asp-controller="Account" asp-route-id="@item.IAccountId"><i class="bi bi-pencil-square"></i> Sửa</a>
+                        <a class="btn btn-danger m-1" asp-action="Delete" asp-controller="Account" asp-route-id="@item.IAccountId" onclick="return confirm('Có chắc chắn xóa vĩnh viễn?');"><i class="bi bi-trash"></i> Xóa</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+@section Scripts {
+    <script>
+
+        function searchAccount(searchInputString) {
+            $.ajax({
+                url: 'Account/Search',
+                data: {searchInputString: searchInputString},
+                type: 'GET',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                success: function(response){
+                    if(response == null || response == undefined || response.length == 0){
+                        var data = '';
+                        data += '<tr><td colspan="7">Không có dữ kiện liên quan</td></tr>';
+                        $('#table-accounts').html(data);
+                        console.log(response);
+                    }else{
+                        var data = '';
+                        $.each(response, function (index, item){
+                            data += '<tr>'
+                                data += '<th scope="row">'+item.iAccountId+'</th>'
+                                data += '<td>'
+                                if(item.sAvatar == null){
+                                    data += '<img src="/images/avatars/avatar_hoder.png" class="rounded-circle" width="40px" height="40px">'
+                                }
+                                else{
+                                    data += '<img src="/images/avatars/'+item.sAvatar+'" class="rounded-circle" width="40px" height="40px">'
+                                }
+                                data += '</td>'
+                                data += '<td>'+item.sName+'</td>'
+                                data += '<td>'+item.sEmail+'</td>'
+                                data += '<td>'+formatDate(item.dBirthofdate)+'</td>'
+                                data += '<td>'+item.sPhone+'</td>'
+                                data += '<td>'
+                                    data += '<a class="btn btn-success m-1" href="Account/Edit/'+item.iAccountId+'"><i class="bi bi-pencil-square"></i> Sửa</a>'
+                                    data += '<a class="btn btn-danger m-1" href="Account/Delete/'+item.iAccountId+'" onclick="return confirm(\'Có chắc chắn xóa vĩnh viễn?\');"><i class="bi bi-trash"></i> Xóa</a>'
+                                data += '</td>'
+                            data += '</tr>'
+                        });
+                        $('#table-accounts').html(data);
+                        console.log(response);
+                    }
+                },
+                error: function(response){
+                    var data = '';
+                    data += '<tr><td colspan="6">Lỗi! Không lấy được dữ kiện</td></tr>';
+                    $('#table-contents').html(data);
+                }
+            });
+        }
+
+        function formatDate(dateString){
+            var d = new Date(dateString);
+            var day = d.getDate() < 10 ? '0'+d.getDate() : d.getDate();
+            var month = d.getMonth()+1 < 10 ? '0'+(d.getMonth()+1) : (d.getMonth()+1);;
+            var year = d.getFullYear();
+
+            return day+'/'+month+'/'+year;
+        }
+    </script>
+}

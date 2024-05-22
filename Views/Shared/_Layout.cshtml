@@ -1,0 +1,123 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    ViewData["Title"] = "Cổng thông tin điện tử";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Hiệp hội trái tim tình thương</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons-1.11.3/font/bootstrap-icons.min.css"/>
+    <link rel="stylesheet" href="~/lib/bootstrap-icons-1.11.3/font/bootstrap-icons.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/BTLG06WNC.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <div id="header" class="d-flex justify-content-between bg-white py-2">
+            <a id="logo-container" asp-controller="Home" asp-action="Index">
+                <img src="~/images/logo_hiep_hoi_trai_tim.png" alt="" id="logo-navbar">
+                Hiệp hội trái tim tình thương
+            </a>
+            <ul class="nav">
+                @if(@HttpContextAccessor.HttpContext!.Session.GetString("User") == null){
+                    <li class="nav-item d-flex align-items-center">
+                        <a class="nav-link" asp-action="Login" asp-controller="Account">Đăng nhập</a>
+                    </li>
+                    <li class="nav-item d-flex align-items-center">
+                        <a class="nav-link" asp-action="Register" asp-controller="Account">Đăng ký</a>
+                    </li>
+                }
+                else {
+                    <li class="nav-item d-flex align-items-center dropdown" >
+                        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" href="">
+                            <img src="~/images/avatars/avatar_hoder.png" style="width: 30px; height: 30px;" class="rounded-circle" alt="">
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" asp-controller="Account" asp-action="Information">Thông tin tài khoản</a></li>
+                            @if(@HttpContextAccessor.HttpContext!.Session.GetInt32("Role") == 1){
+                                <li><a class="dropdown-item" asp-controller="Content" asp-action="Index">Quản lý tài nguyên</a></li>
+                                <li><a class="dropdown-item" asp-controller="Account" asp-action="Index">Quản lý hội viên</a></li>
+                            }
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" asp-action="Logout" asp-controller="Account">Đăng xuất</a></li>
+                        </ul>
+                    </li>
+                }
+            </ul>
+        </div>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-secondary border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between ">
+                    <ul class="navbar-nav flex-grow-1 justify-content-center text-white fs-5">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Trang chủ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Introduce">Giới thiệu</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="News">Tin tức - sự kiện</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Activity">Hoạt động của hội</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Member">Hội viên</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Contact">Liên hệ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Feedback">Hỏi đáp</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top py-3 my-4">
+        <ul class="nav justify-content-center pb-3 mb-3">
+            <li class="nav-item">
+                <a class="nav-link px-2 text-body-secondary" asp-controller="Home" asp-action="Index">Trang chủ</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link px-2 text-body-secondary" asp-controller="Home" asp-action="Introduce">Tin tức sự kiện</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link px-2 text-body-secondary" sp-controller="Home" asp-action="Introduce">Giới thiệu</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link px-2 text-body-secondary" asp-controller="Home" asp-action="Activity">Hoạt động của hội</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link px-2 text-body-secondary" asp-controller="Home" asp-action="Contact">Liên hệ</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link px-2 text-body-secondary" asp-controller="Home" asp-action="Feedback">Hỏi đáp</a>
+            </li>
+        </ul>
+        <p class="text-center text-body-secondary ">
+            &copy; 2024 - Hiệp hội trái tim tình thương
+        </p>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/b6ab50bfe4.js" crossorigin="anonymous"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

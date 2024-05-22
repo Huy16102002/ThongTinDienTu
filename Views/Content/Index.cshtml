@@ -1,0 +1,134 @@
+@model List<ContentView>;
+@{
+    ViewData["Title"] = "Quản lý tin tức";  
+}
+
+<div class="container" id="controller-container">
+    <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active">Quản lý tài nguyên</li>
+            <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+        </ol>
+    </nav>
+    <div id="content-controller-body">
+        <div id="content-controller-menu" class="item1 border-top border-end">
+            <ul class="nav flex-column nav-pills">
+                <li class="nav-item mb-3 fs-5">
+                    <a class="nav-link active" aria-current="page" >Quản lý tin tức</a>
+                </li>
+                <li class="nav-item mb-3 fs-5">
+                    <a class="nav-link " asp-action="Index" asp-controller="Category">Quản lý danh mục</a>
+                </li>
+                <li class="nav-item mb-3 fs-5">
+                    <a class="nav-link " sp-action="Index" asp-controller="ResourceFile">Quản lý tệp</a>
+                </li>
+                <li class="nav-item mb-3 fs-5">
+                    <a class="nav-link " asp-action="Index" asp-controller="Feedback">Quản lý hỏi đáp</a>
+                </li>
+            </ul>
+        </div>
+        <div class="item2 border-top">
+            <div class="row justify-content-between">
+                <div class="col-md-4">
+                    <a id="btn-add-news" class="btn btn-primary" asp-controller="Content" asp-action="Create">
+                        <i class="bi bi-plus-circle"></i> Thêm tin tức
+                    </a>
+                </div>
+                <div class="input-group col-md-4" style="width: 300px;">
+                    <input type="text" class="form-control" id="searchInput" name="searchInputString" placeholder="Tìm kiếm..." >
+                    <button class="btn btn-outline-primary" onclick="searchNews($('#searchInput').val())"><i class="bi bi-search"></i></button>
+                </div>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Tiêu đề</th>
+                        <th scope="col">Hình ảnh</th>
+                        <th scope="col">Ngày đăng</th>
+                        <th scope="col">Nguồn</th>
+                        <th scope="col">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody id="table-contents">
+                    @foreach(var item in Model){
+                        <tr>
+                            <th scope="row">@item.IContentId</th>
+                            <td style="width: 380px;">
+                                <a class="nav-link fw-bold" style="padding: 0;" asp-action="Edit" asp-controller="Content" asp-route-id="@item.IContentId">@item.STitle</a>
+                                <span>@item.categories!.FirstOrDefault(c => c.ICategoryId == @item.ICategoryId)!.STitle</span>
+                            </td>
+                            <td><img class="rounded" src="~/images/@item.SFilename" style="width: 150px; height: 100px;" alt=""></td>
+                            <td>@item.DCreatedate!.Value.ToString("dd/MM/yyyy")</td>
+                            <td>@item.SSource</td>
+                            <td>
+                                <a class="btn btn-success m-1" asp-action="Edit" asp-controller="Content" asp-route-id="@item.IContentId"><i class="bi bi-pencil-square"></i> Sửa</a>
+                                <a class="btn btn-danger m-1" asp-action="Delete" asp-controller="Content" asp-route-id="@item.IContentId" onclick="return confirm('Có chắc chắn xóa vĩnh viễn?');"><i class="bi bi-trash"></i> Xóa</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+
+        function searchNews(searchInputString) {
+            $.ajax({
+                url: 'Content/Search',
+                data: {searchInputString: searchInputString},
+                type: 'GET',
+                dataType: 'json',
+                contentType: 'application/json;charset=utf-8',
+                success: function(response){
+                    if(response == null || response == undefined || response.length == 0){
+                        var data = '';
+                        data += '<tr><td colspan="6">Không có dữ kiện liên quan</td></tr>';
+                        $('#table-contents').html(data);
+                        console.log(response);
+                    }else{
+                        var data = '';
+                        console.log(response);
+                        $.each(response, function(index, item){
+                            
+                            data+= '<tr>';
+                                data+= '<th scope="row">'+item.iContentId+'</th>'
+                                data+= '<td style="width: 380px;">'
+                                    data+= '<a class="nav-link fw-bold" style="padding: 0;" href="Content/Detail/'+item.iContentId+'">'+item.sTitle+'</a>'
+                                    data+= '<span>'+item.categoryName+'</span>'
+                                data+= '</td>'
+                                data+= '<td><img class="rounded" src="/images/'+item.sImage+'" style="width: 150px; height: 100px;"></td>'
+                                data+= '<td>'+formatDate(item.dCreatedate)+'</td>'
+                                data+= '<td>'+item.sSource+'</td>'
+                                data+= '<td>'
+                                    data+= '<a class="btn btn-success m-1" href="Content/Edit/'+item.iContentId+'"><i class="bi bi-pencil-square"></i> Sửa</a>'
+                                    data+= '<a class="btn btn-danger m-1" href="Content/Delete/'+item.iContentId+'" onclick="return confirm(\'Có chắc chắn xóa vĩnh viễn?\');"><i class="bi bi-trash"></i> Xóa</a>'
+                                data+= '</td>'
+                            data+= '</tr>'
+                        });
+                        
+                        $('#table-contents').html(data);
+                    }
+                },
+                error: function(response){
+                    var data = '';
+                    data += '<tr><td colspan="6">Lỗi! Không lấy được dữ kiện</td></tr>';
+                    $('#table-contents').html(data);
+                }
+            });
+        }
+
+
+        function formatDate(dateString){
+            var d = new Date(dateString);
+            var day = d.getDate() < 10 ? '0'+d.getDate() : d.getDate();
+            var month = d.getMonth()+1 < 10 ? '0'+(d.getMonth()+1) : (d.getMonth()+1);;
+            var year = d.getFullYear();
+
+            return day+'/'+month+'/'+year;
+        }
+    </script>
+}

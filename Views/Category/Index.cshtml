@@ -1,0 +1,64 @@
+@model List<Category>;
+@{
+    ViewData["Title"] = "Quản lý danh mục";
+}
+
+<div class="container" id="controller-container">
+    <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">Quản lý tài nguyên</li>
+            <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+        </ol>
+    </nav>
+    <div id="content-controller-body">
+        <div id="content-controller-menu" class="item1 border-top border-end">
+            <ul class="nav flex-column nav-pills">
+                <li class="nav-item mb-3 fs-5">
+                    <a class="nav-link"  asp-action="Index" asp-controller="Content">Quản lý tin tức</a>
+                </li>
+                <li class="nav-item mb-3 fs-5" >
+                    <a class="nav-link active" aria-current="page">Quản lý danh mục</a>
+                </li>
+                <li class="nav-item mb-3 fs-5">
+                    <a class="nav-link " asp-action="Index" asp-controller="ResourceFile">Quản lý tệp</a>
+                </li>
+                <li class="nav-item mb-3 fs-5">
+                    <a class="nav-link " asp-action="Index" asp-controller="Feedback">Quản lý hỏi đáp</a>
+                </li>
+            </ul>
+        </div>
+        <div class="item2 border-top">
+            <div class="row justify-content-between">
+                <div class="col-md-4">
+                    <a id="btn-add-categoty" class="btn btn-primary" asp-controller="Category" asp-action="Create">
+                        <i class="bi bi-plus-circle"></i> Thêm danh mục
+                    </a>
+                </div>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Tiêu đề</th>
+                        <th scope="col">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody id="table-categories">
+                    @foreach(var item in Model){
+                        <tr>
+                            <th scope="row">@item.ICategoryId</th>
+                            <td>
+                                <a class="nav-link fw-bold p-0" asp-action="Edit" asp-controller="Category" asp-route-id="@item.ICategoryId">@item.STitle</a>
+                            </td>
+
+                            <td>
+                                <a class="btn btn-success m-1" asp-action="Edit" asp-controller="Category" asp-route-id="@item.ICategoryId"><i class="bi bi-pencil-square"></i> Sửa</a>
+                                <a class="btn btn-danger m-1" asp-action="Delete" asp-controller="Category" asp-route-id="@item.ICategoryId" onclick="return confirm('Có chắc chắn xóa vĩnh viễn?');"><i class="bi bi-trash"></i> Xóa</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

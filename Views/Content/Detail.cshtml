@@ -1,0 +1,37 @@
+@model ContentView;
+@{
+    ViewData["Title"] = Model.STitle;
+}
+
+<div class="container" id="detail-container">
+    <div class="item1">
+        <h5 class="text-primary">@Model.STitle</h5>
+        <span class="text-secondary mb-3 d-inline-block">@Model.DCreatedate!.Value.ToString("dd/MM/yyyy")</span>
+        @if(!String.IsNullOrEmpty(@Model.SFilename)){
+            <img class="rounded mb-3" src="~/images/@Model.SFilename">
+        }
+        <span class="main-body px-1">@Model.SMainbody</span>
+        <p class="mt-4">Nguồn: <span>@Model.SSource</span></p>
+    </div>
+    <div class="item2">
+        <h6 class="border-bottom pb-1 mb-3 text-primary-emphasis">Tin tức cùng chuyên mục</h6>
+        <table class="table">
+            <tbody>
+                @foreach(var item in Model.relatedContents!){
+                    <tr>
+                        <td>
+                            @if(String.IsNullOrEmpty(@item.SImage)){
+                                <img class="rounded" src="~/images/thumbnail_news.png" width="100px" height="60px" alt="">
+                            }else {
+                                <img class="rounded" src="~/images/@item.SImage" width="100px" height="60px" alt="">
+                            }
+                        </td>
+                        <td>
+                            <a class="nav-link p-0">@item.STitle</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

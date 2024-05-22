@@ -1,0 +1,51 @@
+@model ResourceFileView;
+@{
+    ViewData["Title"] = "Sửa thông tin tệp";
+
+}
+
+<div class="text-center m-5">
+    <h2>@ViewData["Title"] ID:@Model.IResourceFileId</h2>
+</div>
+<div class="container">
+    <form asp-action="Edit" asp-controller="ResourceFile" enctype="multipart/form-data">
+        <div class="form-floating mb-3">
+            <input class="form-control" placeholder="" asp-for="IResourceFileId" readonly>
+            <label for="IResourceFileId">ID<span class="text-danger"></span></label>
+        </div>
+        <div class="form-floating mb-3">
+            <input class="form-control" placeholder="" asp-for="SFileName" readonly>
+            <label for="SFileName">Tên tệp<span class="text-danger"></span></label>
+        </div>
+        <div class="form-floating mb-3">
+            <input class="form-control" placeholder="" asp-for="SDescription">
+            <label for="SDescription">Mô tả<span class="text-danger">*</span></label>
+            <span asp-validation-for="SDescription" class="text-danger"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input class="form-control" placeholder="" asp-for="DUploaddate" readonly>
+            <label for="DUploaddate">Ngày đăng<span class="text-danger">*</span></label>
+            <span asp-validation-for="DUploaddate" class="text-danger"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <select class="form-select" id="floatingSelect" aria-label="Floating label select example" asp-for="ICategoryId" >
+                @foreach(var cate in Model.LFileCategories!){
+                    if(Model.ICategoryId == cate.IFileCategoryId){
+                        <option value="@cate.IFileCategoryId" selected>@cate.STitle</option>
+                    }else{
+                        <option value="@cate.IFileCategoryId">@cate.STitle</option>
+                    }
+                }
+            </select>
+            <label for="ICategoryId">Loại tệp</label>
+        </div>
+        <div>
+            <button type="submit" class="btn btn-success m-3">
+                <i class="bi bi-pencil-square"></i> Sửa
+            </button>
+            <a class="btn btn-danger m-3" asp-action="Index" asp-controller="ResourceFile">
+                <i class="bi bi-x-circle"></i> Hủy
+            </a>
+        </div>
+    </form>
+</div>

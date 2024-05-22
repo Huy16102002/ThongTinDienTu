@@ -1,0 +1,70 @@
+@model List<Feedback>;
+@{
+    ViewData["Title"] = "Quản lý hỏi đáp";
+}
+
+<div class="container" id="controller-container">
+    <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" >Quản lý tài nguyên</li>
+            <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+        </ol>
+    </nav>
+    <div id="content-controller-body">
+        <div id="content-controller-menu" class="item1 border-top border-end">
+            <ul class="nav flex-column nav-pills">
+                <li class="nav-item mb-3 fs-5">
+                    <a class="nav-link"  asp-action="Index" asp-controller="Content">Quản lý tin tức</a>
+                </li>
+                <li class="nav-item mb-3 fs-5" >
+                    <a class="nav-link "  asp-action="Index" asp-controller="Category">Quản lý danh mục</a>
+                </li>
+                <li class="nav-item mb-3 fs-5">
+                    <a class="nav-link "asp-action="Index" asp-controller="ResourceFile">Quản lý tệp</a>
+                </li>
+                <li class="nav-item mb-3 fs-5">
+                    <a class="nav-link active"  aria-current="page" >Quản lý hỏi đáp</a>
+                </li>
+            </ul>
+        </div>
+        <div class="item2 border-top">
+            <div class="row justify-content-between">
+                
+
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Tài khoản</th>
+                        <th scope="col">Nội dung câu hỏi</th>
+                        <th scope="col">Thời gian</th>
+                        <th scope="col">Trả lời</th>
+                        <th scope="col">*</th>
+                    </tr>
+                </thead>
+                <tbody id="table-files">
+                    @foreach(var feedback in Model){
+                        <tr>
+                            <td scope="row">@feedback.IFeedbackId</td>
+                            <td>
+                                <div class="d-inline-flex">
+                                    <img class="rounded-circle" src="~/images/avatars/@feedback.IAccount.SAvatar">
+                                    <span>@feedback.IAccount.SName</span>
+                                </div>
+                            </td>
+                            <td>@feedback.SContent</td>
+                            <td>@feedback.IFeedbackdate</td>
+                            <td>@feedback.SResponse</td>
+                            <td>
+                                @if(feedback.SResponse != null){
+                                    <a class="btn btn-danger m-1" asp-action="Answer" asp-controller="Feedback" asp-route-id="@feedback.IFeedbackId" ><i class="bi bi-trash"></i>Trả lời</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,111 @@
+@model DbG06wncContext;
+@{
+    ViewData["Title"] = "Trang chủ";
+}
+<div class="container">
+    <nav aria-label="breadcrumb" style="--bs-breadcrumb-divider: '>';">
+        <ol class="breadcrumb ms-2">
+            <li class="breadcrumb-item active" aria-current="page">@ViewData["Title"]</li>
+        </ol>
+    </nav>
+</div>
+<div class="container text-center" id="home-container">
+    <div class="cell item1">
+        <div>
+            <a asp-action="Detail" asp-controller="Content" asp-route-id="1"><img src="~/images/@Model.Contents.FirstOrDefault(c => c.IContentId == 1)!.SImage" class="home-image rounded" /></a>
+            <h3 class="home-title-content">@Model.Contents.FirstOrDefault(c => c.IContentId == 1)!.STitle</h3>
+            <div class="home-preview-content">
+                @Model.Contents.FirstOrDefault(c => c.IContentId == 1)!.SMainbody
+            </div>
+        </div>
+    </div>
+        
+    <div class="cell item2">
+        <h5><span class="badge bg-danger">Tiêu điểm</span></h5>
+        <table class="table">
+            <tbody>
+                @foreach(var content in Model.Contents.Take(6)){
+                    if(content.ICategoryId == 1){
+                        <tr>
+                            <th><a asp-action="Detail" asp-controller="Content" asp-route-id="@content.IContentId">@content.STitle</a></th>
+                        </tr>
+                    } 
+                }
+            </tbody>
+        </table>
+        <div class="text-end">
+            <a asp-action="News" asp-controller="Home">Xem thêm</a>
+        </div>
+    </div>
+
+    <div class="cell item3">
+        <div>
+            <img class="rounded" src="~/images/dang-ky-hien-tang-online-1-1.png" alt="">
+        </div>
+        <div>
+            <img class="rounded" src="~/images/dang-ky-hien-tang-online-1-1.png" alt="">
+        </div>
+    </div>
+        
+    <div class="cell item4">
+        <h5><span class="badge bg-primary">Hoạt động của hội</span></h5>
+        <div class="row row-cols-2">
+            @foreach(var content in Model.Contents){
+                if(content.ICategoryId == 2){
+                    <div class="col">
+                        <a href="">
+                            <img src="~/images/@content.SImage" class="rounded"  alt="">
+                            <span>@content.SMainbody</span>
+                        </a>
+                    </div>
+                }
+            }
+        </div>
+        <div class="text-center">
+            <a href="">Xem thêm</a>
+        </div>
+    </div>
+
+    <div class="cell item5">
+        <h5><span class="badge bg-primary">Kiến thức và kỹ năng</span></h5>
+        <div class="container">
+            @foreach(var content in Model.Contents){
+                if(content.ICategoryId == 6){
+                    <div class="row">
+                        <a href="">
+                            <img src="~/images/@content.SImage" class="rounded"  alt="">
+                            <span>@content.SMainbody</span>
+                        </a>
+                    </div>
+                }
+            }
+        </div>
+        <div class="text-end">
+            <a href="">Xem thêm</a>
+        </div>
+    </div>
+
+    <div class="cell item6">
+        <h5><span class="badge bg-primary">Hội viên</span></h5>
+        <div class="container">
+            @foreach(var member in Model.Accounts){
+                if(member.IRoleId == 2){
+                    <div class="row border-bottom">
+                        @if(String.IsNullOrEmpty(@member.SAvatar)){
+                            <img src="~/images/avatars/avatar_hoder.png" class="rounded-circle" alt="">
+                        }else {
+                            <img src="~/images/avatars/@member.SAvatar" class="rounded-circle" alt="">
+                        }
+                        <h6>@member.SName</h6>
+                    </div>
+                }
+            }
+        </div>
+        <div class="text-end">
+            <a href="">Xem thêm</a>
+        </div>
+    </div>
+
+
+
+</div>

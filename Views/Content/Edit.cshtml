@@ -1,0 +1,76 @@
+@model ContentView;
+@{
+    ViewData["Title"] = Model.IContentId+ ":Chỉnh sửa";
+}
+<div class="text-center m-5">
+    <h2>Chỉnh sửa ID:@Model.IContentId</h2>
+</div>
+<div class="container">
+    <form asp-action="Edit" enctype="multipart/form-data">
+        <div class="form-floating mb-3">
+            <input class="form-control" placeholder="" asp-for="IContentId" readonly>
+            <label for="IContentId">ID</label>
+            <span asp-validation-for="STitle" class="text-danger"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <input class="form-control" placeholder="" asp-for="STitle">
+            <label for="STitle">Tiêu đề<span class="text-danger">*</span></label>
+            <span asp-validation-for="STitle" class="text-danger"></span>
+        </div>
+        <div class="form-floating mb-3 ">
+            <input class="form-control" placeholder="" asp-for="DCreatedate">
+            <label for="DCreatedate">Ngày trích dẫn<span class="text-danger">*</span></label>
+            <span asp-validation-for="DCreatedate" class="text-danger"></span>
+        </div>
+        <div class="form-floating mb-3 ">
+            <select class="form-select" aria-label="Default select example" asp-for="ICategoryId">
+                @foreach(var category in @Model.categories!){
+                    <option value="@category.ICategoryId">@category.STitle</option>
+                }
+            </select>
+            <label >Danh mục</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input class="form-control" placeholder="" asp-for="SSource">
+            <label for="SSource">Nguồn trích</label>
+        </div>
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="sImage">Hình ảnh</span></label>
+            <input class="form-control" asp-for="sImage" placeholder="" accept="Image/png, Image/jpeg">
+        </div>
+        <div class="mb-3">
+            <img class="rounded" style="width: 200px; height: 150px;" alt="" src="~/images/@Model.SFilename" id="imgPreview">
+            <span class="text-danger" asp-validation-for="sImage"></span>
+        </div>
+        <div class="form-floating mb-3">
+            <textarea style="height: 500px;" class="form-control" placeholder="" asp-for="SMainbody"></textarea>
+            <label for="SMainbody">Nội dung chính<span class="text-danger">*</span></label>
+            <span asp-validation-for="SMainbody" class="text-danger"></span>
+        </div>
+        <div>
+            <button type="submit" class="btn btn-success m-3">
+                <i class="bi bi-pencil-square"></i> Sửa
+            </button>
+            <a class="btn btn-danger m-3" asp-action="Index" asp-controller="Content">
+                <i class="bi bi-x-circle"></i> Hủy
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        const input = document.getElementById('sImage');
+        const image = document.getElementById('imgPreview');
+
+        input.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                const src = URL.createObjectURL(e.target.files[0]);
+                image.src = src;
+            }
+        });
+
+
+
+    </script>
+}
